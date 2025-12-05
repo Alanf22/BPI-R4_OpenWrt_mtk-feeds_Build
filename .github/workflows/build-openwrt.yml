@@ -1,7 +1,7 @@
 name: Build OpenWrt for BPI-R4
 
 on:
-  workflow_dispatch: # Ejecutable manualmente desde GitHub Actions
+  workflow_dispatch:
 
 jobs:
   build:
@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: |
@@ -30,7 +30,7 @@ jobs:
           ./mtk-openwrt_build.sh
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: openwrt-output
           path: BPI-R4_OpenWrt_mtk-feeds_Build/bin/
