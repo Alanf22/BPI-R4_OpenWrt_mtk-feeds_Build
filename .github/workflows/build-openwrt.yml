@@ -1,0 +1,36 @@
+name: Build OpenWrt for BPI-R4
+
+on:
+  workflow_dispatch: # Ejecutable manualmente desde GitHub Actions
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential clang flex bison g++ gawk gcc-multilib g++-multilib \
+            gettext git libncurses5-dev libssl-dev python3-setuptools swig unzip zlib1g-dev \
+            file wget dos2unix rsync
+
+      - name: Clone OpenWrt Build Repo
+        run: |
+          git clone https://github.com/Gilly1970/BPI-R4_OpenWrt_mtk-feeds_Build.git
+          sudo chmod 775 -R BPI-R4_OpenWrt_mtk-feeds_Build
+
+      - name: Run build script
+        run: |
+          cd BPI-R4_OpenWrt_mtk-feeds_Build
+          chmod +x mtk-openwrt_build.sh
+          ./mtk-openwrt_build.sh
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: openwrt-output
+          path: BPI-R4_OpenWrt_mtk-feeds_Build/bin/
